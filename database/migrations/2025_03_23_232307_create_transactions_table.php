@@ -18,6 +18,7 @@ return new class extends Migration
             $table->double('quantiteTransitee');
             $table->double('prix');
             $table->string('acheteur');
+            $table->foreignId('produit_id')->references('id')->on('produits');
             $table->timestamps();
         });
     }
