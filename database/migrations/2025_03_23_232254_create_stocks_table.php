@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->double('quantiteStock');
             $table->string('lieu');
-            $table->foreignId('produit_id')->references('id')->on('produits');
+            $table->foreignId('produit_id')->references('id')->on('produits')->onDelete('cascade');
             $table->timestamps();
         });
     }
@@ -26,5 +26,8 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('stocks');
+        Schema::table('stocks', function (Blueprint $table) {
+            $table->dropColumn('produit_id');
+        });
     }
 };

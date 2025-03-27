@@ -4,11 +4,12 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Transaction;
+use App\Models\Produit;
 use Illuminate\Support\Facades\View;
 
 class TransactionController extends Controller
 {
-
+    protected $updating = false; 
 
     /**
      * Display a listing of the resource.
@@ -24,7 +25,9 @@ class TransactionController extends Controller
      */
     public function create()
     {
-        //
+        $updating = $this->updating;
+        $produits = Produit::all();
+        return view('transaction.form', compact('updating', 'produits'));
     }
 
     /**
@@ -32,7 +35,22 @@ class TransactionController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'typeTransaction'=>'required|string',
+            'dateTransaction'=>'required|date',
+            'quantiteTransitee'=>'required|numeric',
+            'prix'=>'required|numeric',
+            'acheteur'=>'required|string',
+            'produit'=>'required|int'
+        ]);
+        $transaction = Transaction::create($request->all());
+        if($transaction->save()){
+            return redirect('/transactions')->with('message', 'Transaction créée avec succès');
+        }else{
+            return back()->with('message', 'Erreur lors de la création de la transaction, Veuillez recommencer');
+        }
+            
+        
     }
 
     /**
@@ -48,7 +66,10 @@ class TransactionController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $this->updating = true;
+        $updating = $this->updating;
+        $transaction = Transaction::find($id);
+        return view('transaction.form', compact('updating','transaction'));
     }
 
     /**
