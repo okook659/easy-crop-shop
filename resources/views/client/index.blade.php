@@ -10,7 +10,7 @@
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900 dark:text-gray-100">
                     <a href="{{ route('clients.create') }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                        Ajouter un client
+                        <i class="fa-solid fa-plus"></i> Ajouter un client
                       </a>
                       <table class='table w-full mt-4 text-lg border b-1 b-black'>
                         <thead class=' border b-2 border-black'>
@@ -28,7 +28,7 @@
                                     <td class='p-3 text-gray-700 table-cell text-center border b-1'> {{$client["telephone"]}} </td>
                                     <td class='p-3 text-gray-700 table-cell text-center border b-1'> {{$client["adresse"]}} </td>
                                     <td class='p-3 text-gray-700 table-cell text-center border b-1'> 
-                                        <div class="flex text-center">
+                                        <div class="flex text-center justify-center">
                                             <a href="{{ route('clients.show', ['client' => $client->id]) }}" class="bg-purple-600 hover:bg-purple-800 text-white font-bold py-2 px-4 rounded ml-2">
                                                 <i class="fa-solid fa-eye" title="afficher"></i>
                                             </a>
