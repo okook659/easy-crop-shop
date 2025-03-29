@@ -47,7 +47,7 @@ class TransactionController extends Controller
         if($transaction->save()){
             return redirect('/transactions')->with('message', 'Transaction créée avec succès');
         }else{
-            return back()->with('message', 'Erreur lors de la création de la transaction, Veuillez recommencer');
+            return back()->with('message', 'Erreur lors de la création de la transaction... Veuillez recommencer');
         }
             
         
