@@ -26,8 +26,7 @@
                                     </label>
                               </td>
                               <td class="w-2/4">
-                                  <input name="designation" class="
-                                   shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight text-lg focus:outline-none focus:shadow-outline" id="designation" type="text"
+                                  <input name="designation" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight text-lg focus:outline-none focus:shadow-outline" id="designation" type="text"
                                    placeholder="Renseigner la désignation du client" value="{{ $updating ? $client->designation : ''  }}"   />
                               </td>
                             </tr>
