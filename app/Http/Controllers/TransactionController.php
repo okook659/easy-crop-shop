@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Transaction;
 use App\Models\Produit;
+use App\Models\Client;
 use Illuminate\Support\Facades\View;
 
 class TransactionController extends Controller
@@ -16,7 +17,7 @@ class TransactionController extends Controller
      */
     public function index()
     {
-        $transactions = Transaction::all();
+        $transactions = Transaction::get();
         return view('transaction.index', compact('transactions'));
     }
 
@@ -27,7 +28,8 @@ class TransactionController extends Controller
     {
         $updating = $this->updating;
         $produits = Produit::all();
-        return view('transaction.form', compact('updating', 'produits'));
+        $clients = Client::all();
+        return view('transaction.form', compact('updating', 'produits', 'clients'));
     }
 
     /**
@@ -40,17 +42,21 @@ class TransactionController extends Controller
             'dateTransaction'=>'required|date',
             'quantiteTransitee'=>'required|numeric',
             'prix'=>'required|numeric',
-            'acheteur'=>'required|string',
-            'produit'=>'required|int'
+            'client_id'=>'required|numeric',
+            'produit_id'=>'required|numeric'
         ]);
         $transaction = Transaction::create($request->all());
-        if($transaction->save()){
-            return redirect('/transactions')->with('message', 'Transaction créée avec succès');
-        }else{
-            return back()->with('message', 'Erreur lors de la création de la transaction... Veuillez recommencer');
-        }
-            
-        
+        if ($transaction->save()) {
+            return redirect('/transactions')->with([
+                'message' => 'Transaction créée avec succès',
+                'success' => true
+            ]);
+        } else {
+            return back()->with([
+                'message' => 'Erreur lors de la création de la transaction... Veuillez recommencer',
+                'success' => false
+            ]);
+        } 
     }
 
     /**
@@ -58,7 +64,8 @@ class TransactionController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $transaction = Transaction::find($id);
+        return view('transaction.show', compact('transaction'));
     }
 
     /**
@@ -69,7 +76,11 @@ class TransactionController extends Controller
         $this->updating = true;
         $updating = $this->updating;
         $transaction = Transaction::find($id);
-        return view('transaction.form', compact('updating','transaction'));
+        $clients = Client::all();
+        $clients = $clients->except([$transaction['client_id']]);
+        $produits = Produit::all();
+        $produits = $produits->except([$transaction['produit_id']]);
+        return view('transaction.form', compact('updating','transaction', 'clients', 'produits'));
     }
 
     /**
@@ -77,7 +88,27 @@ class TransactionController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $request->validate([
+            'typeTransaction'=>'required|string',
+            'dateTransaction'=>'required|date',
+            'quantiteTransitee'=>'required|numeric',
+            'prix'=>'required|numeric',
+            'client_id'=>'required|numeric',
+            'produit_id'=>'required|numeric'
+        ]);
+        $transaction = Transaction::find($id);
+        $transaction->update($request->all());
+        if ($transaction->save()) {
+            return redirect('/transactions')->with([
+                'message' => 'Transaction modifiée avec succès',
+                'success' => true
+            ]);
+        } else {
+            return back()->with([
+                'message' => 'Erreur lors de la modification de la transaction... Veuillez recommencer',
+                'success' => false
+            ]);
+        } 
     }
 
     /**
@@ -85,6 +116,17 @@ class TransactionController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $res = Transaction::find($id)->delete();
+        if($res){
+            return redirect('/transactions')->with([
+                'message' => 'Transaction supprimée avec succès',
+                'success' => true
+            ]);
+        }else{
+            return back()->with([
+                'message' => 'Erreur lors de la suppression de la transaction... Veuillez recommencer',
+                'success' => false
+            ]);
+        }
     }
 }
