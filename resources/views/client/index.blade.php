@@ -24,10 +24,10 @@
                         <tbody class=''>
                             @foreach ($clients as $client)
                                 <tr class="table-row">
-                                    <td class='p-3 text-gray-700 table-cell text-center border b-1'> {{$client["designation"]}} </td>
-                                    <td class='p-3 text-gray-700 table-cell text-center border b-1'> {{$client["telephone"]}} </td>
-                                    <td class='p-3 text-gray-700 table-cell text-center border b-1'> {{$client["adresse"]}} </td>
-                                    <td class='p-3 text-gray-700 table-cell text-center border b-1'> 
+                                    <td class='p-3 table-cell text-center border b-1'> {{$client["designation"]}} </td>
+                                    <td class='p-3 table-cell text-center border b-1'> {{$client["telephone"]}} </td>
+                                    <td class='p-3 table-cell text-center border b-1'> {{$client["adresse"]}} </td>
+                                    <td class='p-3 table-cell text-center border b-1'> 
                                         <div class="flex text-center justify-center">
                                             <a href="{{ route('clients.show', ['client' => $client->id]) }}" class="bg-purple-600 hover:bg-purple-800 text-white font-bold py-2 px-4 rounded ml-2">
                                                 <i class="fa-solid fa-eye" title="afficher"></i>
