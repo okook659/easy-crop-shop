@@ -1,16 +1,9 @@
 <x-app-layout>
     <x-slot name="script">
         <!-- Scripts -->
+        @vite(['resources/js/slim_select.js'])
         <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
-        <script>
-            $(document).ready(function() {
-                $('#client_id').select2();
-            });
-            $(document).ready(function() {
-                $('#produit_id').select2();
-            });
-        </script>
+  
     </x-slot>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
@@ -41,13 +34,13 @@
                                       </label>
                                 </td>
                                 <td class="w-2/4">
-                                    <select name="client_id"  class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight text-lg focus:outline-none focus:shadow-outline" id="client_id" >
+                                    <select name="client_id"  class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="client_id" >
                                         @if ($updating)
                                             <option value="{{ $transaction['client_id'] }}">{{ $transaction->client->designation }}</option>
                                             @foreach ($clients as $client)
                                                 <option value="{{ $client->id }}">{{ $client->designation }}</option>
                                             @endforeach
-                                        @else
+                                        @else       
                                         <option value="">Choisir le client</option>
                                         @foreach ($clients as $client)
                                             <option value="{{ $client->id }}">{{ $client->designation }}</option>
@@ -64,7 +57,7 @@
                                 </td>
                                 <td class="w-2/4">
                                     <select name="produit_id" id="produit_id" class="
-                                    shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" >
+                                    shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline " >
                                     @if ($updating)
                                     <option value="{{ $transaction['produit_id'] }}">{{ $transaction->produit->nom }}</option>
                                     @foreach($produits as $produit)

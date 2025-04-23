@@ -5,6 +5,9 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\ClientController;
 
+Route::get('/', function () {
+    return view('welcome');
+});
 
 Route::get('/dashboard', function () {
     return view('dashboard');
@@ -12,9 +15,7 @@ Route::get('/dashboard', function () {
 
 Route::middleware('auth')->group(function () {
     //Pour protéger vos routes, il suffit de mettre les routes ici
-    // Route::get('/', function () {
-    //     return view('welcome');
-    // });
+    
     Route::resource('clients', ClientController::class);
     Route::resource('transactions', TransactionController::class);
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
