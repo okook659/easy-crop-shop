@@ -56,7 +56,7 @@
                                 </td>
                             </tr>
                            
-                            <tr class="flex justify-center align-center mb-4">
+                            <tr class="flex justify-around align-center mb-4">
                                 <td>
                                     <button class="cursor-pointer w-full bg-stone-600 ml-px hover:bg-stone-500 text-white font-bold py-2 px-4 rounded ">
                                         <a href="{{ route('clients.index') }}" >Retour</a>
