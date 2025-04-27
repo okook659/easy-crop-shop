@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Stock;
 
 class StockController extends Controller
 {
@@ -13,7 +14,7 @@ class StockController extends Controller
     {
         //Afficher tous les stocks
         $stocks = Stock::all();
-        return view('stocks.index', compact('stocks'));
+        return view('stock.index', compact('stocks'));
     }
 
 

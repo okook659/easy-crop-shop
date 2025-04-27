@@ -13,7 +13,7 @@
     <!-- stock/create.blade.php -->
 
 
-    <form action="{{ route('stock.store') }}" method="POST">
+    <form action="{{ route('stocks.store') }}" method="POST">
         @csrf
         <div class="form-group">
             <label for="nom_produit">Produit</label>
