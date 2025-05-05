@@ -3,7 +3,6 @@
         <!-- Scripts -->
         @vite(['resources/js/slim_select.js'])
         <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
-  
     </x-slot>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
