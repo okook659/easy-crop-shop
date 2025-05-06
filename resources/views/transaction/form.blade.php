@@ -1,9 +1,12 @@
+@php
+    $today = date('Y-m-d');
+@endphp
 <x-app-layout>
     <x-slot name="script">
-        <!-- Scripts -->
         @vite(['resources/js/slim_select.js'])
         <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
     </x-slot>
+
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
            {{ $updating ? "Modifier une transaction" : "Créer une transaction" }}
@@ -12,142 +15,108 @@
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900 dark:text-gray-100">
-                    @if($updating)
-                        <form action="{{ route('transactions.update', ['transaction'=>$transaction]) }}" method="post" >
-                            @method("PUT")
-                            @csrf
-                    @else
-                        <form action="{{ route('transactions.store') }}" method="post">
-                            @method("POST")
-                            @csrf
-                    @endif
-                    
-                      <table class="w-full">
-                        <tbody class="w-full">
-                            <tr class="w-full mb-4 flex justify-between">
-                                <td class="w-1/4">
-                                    <label class="block text-gray-700 text-lg font-bold mb-2" htmlFor="client_id">
-                                        Client
-                                      </label>
-                                </td>
-                                <td class="w-2/4">
-                                    <select name="client_id"  class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="client_id" >
-                                        @if ($updating)
-                                            <option value="{{ $transaction['client_id'] }}">{{ $transaction->client->designation }}</option>
-                                            @foreach ($clients as $client)
-                                                <option value="{{ $client->id }}">{{ $client->designation }}</option>
-                                            @endforeach
-                                        @else       
-                                        <option value="">Choisir le client</option>
-                                        @foreach ($clients as $client)
-                                            <option value="{{ $client->id }}">{{ $client->designation }}</option>
-                                        @endforeach
-                                        @endif
-                                    </select>
-                                </td>
-                              </tr>
-                            <tr class="w-full mb-4 flex justify-between">
-                                <td class="w-1/4">
-                                    <label class="block text-gray-700 text-lg font-bold mb-2" htmlFor="produit_id">
-                                        Produit
-                                      </label>
-                                </td>
-                                <td class="w-2/4">
-                                    <select name="produit_id" id="produit_id" class="
-                                    shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline " >
-                                    @if ($updating)
-                                    <option value="{{ $transaction['produit_id'] }}">{{ $transaction->produit->nom }}</option>
-                                    @foreach($produits as $produit)
+            <div class="p-6 text-gray-900 dark:text-gray-100">
+                @if($updating)
+                    <form action="{{ route('transactions.update', ['transaction' => $transaction]) }}" method="POST" class="max-w-md mx-auto p-6 bg-white rounded-lg shadow-md">
+                        @csrf
+                        @method('PUT')
+                @else
+                    <form action="{{ route('transactions.store') }}" method="POST" class="max-w-md mx-auto p-6 bg-white rounded-lg shadow-md">
+                        @csrf
+                @endif
+
+                    <div class="mb-4">
+                        <label for="client_id" class="block text-gray-700 font-medium mb-2">Client</label>
+                        <select name="client_id" id="client_id" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                            @if($updating)
+                                <option value="{{ $transaction['client_id'] }}">{{ $transaction->client->designation }}</option>
+                                @foreach ($clients as $client)
+                                    <option value="{{ $client->id }}">{{ $client->designation }}</option>
+                                @endforeach
+                            @else
+                                <option value="">Choisir le client</option>
+                                @foreach ($clients as $client)
+                                    <option value="{{ $client->id }}">{{ $client->designation }}</option>
+                                @endforeach
+                            @endif
+                        </select>
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="produit_id" class="block text-gray-700 font-medium mb-2">Produit</label>
+                        <select name="produit_id" id="produit_id" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                            @if($updating)
+                                <option value="{{ $transaction['produit_id'] }}">{{ $transaction->produit->nom }}</option>
+                                @foreach ($produits as $produit)
                                     <option value="{{ $produit->id }}">{{ $produit->nom }}</option>
-                                    @endforeach
-                                    @else
-                                    <option value="">Choisir le produit</option>
-                                        @foreach($produits as $produit)
-                                        <option value="{{ $produit->id }}">{{ $produit->nom }}</option>
-                                        @endforeach
-                                        @endif
-                                    </select>
-                                </td>
-                              </tr>
-                            <tr class="flex justify-between mb-4">
-                                <td class="w-1/4">
-                                    <label class="block text-gray-700 text-lg font-bold mb-2" htmlFor="typeTransaction">
-                                        Type de transaction
-                                      </label>
-                                </td>
-                                <td class="w-2/4">
-                                    <select class="w-full shadow appearance-none border rounded py-2 px-5 text-black leading-tight focus:outline-none focus:shadow-outline" name="typeTransaction" id="typeTransaction">
-                                        @if ($updating)
-                                        <option value="{{ $transaction['typeTransaction'] }}">{{ $transaction['typeTransaction'] }} </option>
-                                        @if ($transaction['typeTransaction'] == "distribution")
-                                        <option value="vente">Vente</option>  
-                                        @else
-                                        <option value="distribution">Distribution</option>
-                                        @endif
-                                        @else
-                                        <option value="">Renseigner le type de distribution</option>
-                                        <option value="distribution">Distribution</option>
-                                        <option value="vente">Vente</option>
-                                        @endif
-                                    </select>
-                                </td>
-                            </tr>
-                            <tr class="flex justify-between mb-4">
-                                <td class="w-1/4">
-                                    <label class="block text-gray-700 text-lg font-bold mb-2" htmlFor="dateTransaction">
-                                        Date de transaction
-                                      </label>
-                                </td>
-                                <td class="w-2/4">
-                                    <input name="dateTransaction" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="dateTransaction" type="date" 
-                                    @if ($updating)
-                                        value="{{ $transaction['dateTransaction'] }}"
-                                    @endif
-                                    />
-                                </td>
-                            </tr>
-                            <tr class="flex justify-between mb-4">
-                                <td class="w-1/4">
-                                    <label class="block text-gray-700 text-lg font-bold mb-2" htmlFor="quantiteTransitee">
-                                        Quantité transitée
-                                      </label>
-                                </td>
-                                <td class="w-2/4">
-                                    <input name="quantiteTransitee" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="quantiteTransitee" type="number" 
-                                    @if ($updating)
-                                        value="{{ $transaction['quantiteTransitee'] }}"
-                                    @endif
-                                    />
-                                </td>
-                            </tr>
-                            <tr class="flex justify-between mb-4">
-                                <td class="w-1/4">
-                                    <label class="block text-gray-700 text-lg font-bold mb-2" htmlFor="prix">
-                                        Prix
-                                      </label>
-                                </td>
-                                <td class="w-2/4">
-                                    <input name="prix" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="prix" type="number" 
-                                    @if ($updating)
-                                        value="{{ $transaction['prix'] }}"
-                                    @endif
-                                    />
-                                </td>
-                            </tr>
-                            <tr class="flex justify-around align-center mb-4">
-                                <td class="ml-16">
-                                        <a class="cursor-pointer w-full bg-stone-600 ml-px hover:bg-stone-500 text-white font-bold py-2 px-4 rounded " href="{{ route('transactions.index') }}" >Retour</a>
-                                </td>
-                                <td>
-                                    <button type="submit" class="cursor-pointer w-full bg-green-600 hover:bg-green-500 text-white font-bold py-2 px-4 rounded">Valider</button>
-                                </td>
-                            </tr>
-                        </tbody>
-                      </table>
-                        </form>
-                </div>
+                                @endforeach
+                            @else
+                                <option value="">Choisir le produit</option>
+                                @foreach ($produits as $produit)
+                                    <option value="{{ $produit->id }}">{{ $produit->nom }}</option>
+                                @endforeach
+                            @endif
+                        </select>
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="typeTransaction" class="block text-gray-700 font-medium mb-2">Type de transaction</label>
+                        <select name="typeTransaction" id="typeTransaction" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                            @if($updating)
+                                <option value="{{ $transaction['typeTransaction'] }}">{{ ucfirst($transaction['typeTransaction']) }}</option>
+                                @if($transaction['typeTransaction'] === "distribution")
+                                    <option value="vente">Vente</option>
+                                @else
+                                    <option value="distribution">Distribution</option>
+                                @endif
+                            @else
+                                <option value="">Renseigner le type</option>
+                                <option value="distribution">Distribution</option>
+                                <option value="vente">Vente</option>
+                            @endif
+                        </select>
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="dateTransaction" class="block text-gray-700 font-medium mb-2">Date de transaction</label>
+                        <input required type="date" min="{{ $today }}" name="dateTransaction" id="dateTransaction" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                            @if($updating)
+                                value="{{ $transaction['dateTransaction'] }}"
+                            @endif
+                        />
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="quantiteTransitee" class="block text-gray-700 font-medium mb-2">Quantité transitée</label>
+                        <input required type="number" name="quantiteTransitee" id="quantiteTransitee" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                            @if($updating)
+                                value="{{ $transaction['quantiteTransitee'] }}"
+                            @endif
+                        />
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="prix" class="block text-gray-700 font-medium mb-2">Prix</label>
+                        <input required type="number" name="prix" id="prix" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                            @if($updating)
+                                value="{{ $transaction['prix'] }}"
+                            @endif
+                        />
+                    </div>
+
+                    <div class="mb-4">
+                        <a href="{{ route('transactions.index') }}" class="inline-block w-full text-center bg-stone-600 hover:bg-stone-500 text-white font-bold py-2 px-4 rounded">
+                            Retour
+                        </a>
+                    </div>
+
+                    <div class="mb-4">
+                        <button type="submit" class="w-full bg-green-600 text-white font-medium py-2 px-4 rounded-md hover:bg-green-700 transition">
+                            Valider
+                        </button>
+                    </div>
+
+                </form>
             </div>
         </div>
     </div>

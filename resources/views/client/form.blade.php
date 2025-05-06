@@ -7,70 +7,65 @@
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
+           
                 <div class="p-6 text-gray-900 dark:text-gray-100">
                     @if($updating)
-                    <form action="{{ route('clients.update', ['client'=>$client]) }}" method="POST" >
+                    <form action="{{ route('clients.update', ['client'=>$client]) }}" method="POST" class="max-w-md mx-auto p-6 bg-white rounded-lg shadow-md">
                         @csrf
                         @method("PUT")
                     @else
-                        <form action="{{ route('clients.store') }}" method="POST">
+                        <form action="{{ route('clients.store') }}" method="POST" class="max-w-md mx-auto p-6 bg-white rounded-lg shadow-md">
                             @csrf
                     @endif
-                    <table class="w-full">
-                        <tbody class="w-full">
-                            <tr class="w-full mb-4 flex justify-between">
-                              <td class="w-1/4">
-                                  <label class="block text-gray-700 text-lg font-bold mb-2" htmlFor="designation">
+                  
+                            <div class="mb-4">
+                              
+                                  <label class="block text-gray-700 font-medium mb-2" htmlFor="designation">
                                       Désignation
                                     </label>
-                              </td>
-                              <td class="w-2/4">
-                                  <input name="designation" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight text-lg focus:outline-none focus:shadow-outline" id="designation" type="text"
+                             
+                                  <input name="designation" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500" id="designation" type="text"
                                    placeholder="Renseigner la désignation du client" value="{{ $updating ? $client->designation : ''  }}"   />
-                              </td>
-                            </tr>
-                            <tr class="flex justify-between mb-4">
-                                <td>
-                                    <label class="block text-gray-700 text-lg font-bold mb-2" htmlFor="designation">
+                            
+                            </div>
+                           
+                                <div class="mb-4">
+                                    <label class="block text-gray-700 font-medium mb-2" htmlFor="telephone">
                                         Telephone
                                       </label>
-                                </td>
-                                <td class="w-2/4">
-                                    <input name="telephone" 
-                                    placeholder="Renseigner le numéro de téléphone"
-                                    class="
-                                    shadow appearance-none border rounded w-full py-2 px-3 text-lg text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="telephone" type="text"
-                                    value="{{ $updating ? $client->telephone : ''  }}" />
-                                </td>
-                            </tr>
-                            <tr class="flex justify-between mb-4">
-                                <td class="w-1/4">
-                                    <label class="block text-gray-700 text-lg font-bold mb-2" htmlFor="adresse">
-                                        Adresse
-                                      </label>
-                                </td>
-                                <td class="w-2/4">
-                                    <input name="adresse" class="shadow appearance-none border text-lg rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="adresse" type="text" placeholder="Renseigner l'adresse du client" 
-                                    value="{{ $updating ? $client->adresse : ''  }}"/>
-                                </td>
-                            </tr>
-                           
-                            <tr class="flex justify-around align-center mb-4">
-                                <td>
-                                    <button class="cursor-pointer w-full bg-stone-600 ml-px hover:bg-stone-500 text-white font-bold py-2 px-4 rounded ">
-                                        <a href="{{ route('clients.index') }}" >Retour</a>
-                                    </button>
-                                </td>
-                                <td>
-                                    <button type="submit" class="cursor-pointer w-full bg-green-600 hover:bg-green-500 text-white font-bold py-2 px-4 rounded">Valider</button>
-                                </td>
-                            </tr>
-                        </tbody>
-                      </table>
+                                      
+                                      <input name="telephone" 
+                                      placeholder="Renseigner le numéro de téléphone"
+                                      class="
+                                      w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500" id="telephone" type="text"
+                                      value="{{ $updating ? $client->telephone : ''  }}" />
+                                   
+                                </div>
+                            <div class="mb-4">
+
+                                <label class="block text-gray-700 font-medium mb-2 htmlFor="adresse">
+                                    Adresse
+                                </label>
+                            
+                                <input name="adresse" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500" id="adresse" type="text" placeholder="Renseigner l'adresse du client" 
+                                value="{{ $updating ? $client->adresse : ''  }}"/>
+                          
+                        </div>
+                           <div class="mb-4">
+
+                               <button class="cursor-pointer w-full bg-stone-600 ml-px hover:bg-stone-500 text-white font-bold py-2 px-4 rounded ">
+                                   <a href="{{ route('clients.index') }}" >Retour</a>
+                                </button>
+                                
+                           </div>
+                           <div class="mb-4">
+                                <button type="submit" class="w-full bg-green-600 text-white font-medium py-2 px-4 rounded-md hover:bg-green-700 transition">Valider</button>
+                                
+                            </div>
+                          
                         </form>
                 </div>
             </div>
-        </div>
+       
     </div>
 </x-app-layout>
