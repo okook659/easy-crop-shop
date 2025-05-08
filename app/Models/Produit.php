@@ -9,6 +9,7 @@ class Produit extends Model
 {
     /** @use HasFactory<\Database\Factories\ProduitFactory> */
     use HasFactory;
+    protected $fillable = ['nom', 'quantiteRecolte', 'dateRecolte', 'statut'];
 
     public function stock(): HasOne
     {

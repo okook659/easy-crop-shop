@@ -1,158 +1,82 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Liste des Produits</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background: url('/images/agriculture/img3.jpg') no-repeat center center fixed;
-            background-size: cover;
-            margin: 0;
-            padding: 0;
-        }
-        .container {
-            max-width: 1000px;
-            margin: 30px auto;
-            padding: 30px;
-            background-color: white;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-            border-radius: 8px;
-        }
-        h2 {
-            text-align: center;
-            margin-bottom: 30px;
-            color: #007bff;
-        }
-        .btn {
-            padding: 10px 20px;
-            border: none;
-            cursor: pointer;
-            border-radius: 5px;
-            font-size: 16px;
-        }
-        .btn-primary {
-            background-color: #007bff;
-            color: white;
-        }
-        .btn-info {
-            background-color: #17a2b8;
-            color: white;
-        }
-        .btn-warning {
-            background-color: #ffc107;
-            color: black;
-        }
-        .btn-danger {
-            background-color: #dc3545;
-            color: white;
-        }
-        .alert {
-            padding: 10px;
-            background-color: #28a745;
-            color: white;
-            margin-bottom: 20px;
-            border-radius: 5px;
-        }
-        table {
-            width: 100%;
-            margin-top: 20px;
-            border-collapse: collapse;
-        }
-        th, td {
-            padding: 12px;
-            text-align: left;
-            border: 1px solid #ddd;
-        }
-        th {
-            background-color: #f4f4f4;
-        }
-        input[type="text"] {
-            padding: 8px;
-            width: 200px;
-            margin-right: 10px;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-        }
-        .button-container {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 20px;
-        }
-        .actions {
-            display: flex;
-            gap: 10px;
-        }
-        .actions .btn {
-            padding: 8px 16px;
-        }
-        .search-container {
-            margin-bottom: 20px;
-            display: flex;
-            justify-content: flex-end;
-        }
-    </style>
-</head>
-<body>
+<x-app-layout>
+    <x-slot name="header">
+        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+           Liste des produits
+        </h2>
+    </x-slot>
 
-@extends('layouts.app')
+    <div class="py-12">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
+                <div class="p-6 text-gray-900 dark:text-gray-100">
+                    @if(session('message'))
+                        <div id="message" class="mx-auto p-6 mb-6 flex justify-between {{ session('success') ? 'bg-emerald-400 text-gray-700' : 'bg-rose-500 text-white' }}">
+                           <p> {{ session('message') }}</p> 
+                            <span class="ml-5"><i class="fa-solid fa-xmark cursor-pointer" id="close-btn"></i></span>
+                        </div>
+                    @endif
 
-@section('content')
-<div class="container">
-    <h2>Liste des Produits</h2>
-    
-    <!-- Rechercher un produit -->
-    <div class="search-container">
-        <form action="{{ route('produits.index') }}" method="GET">
-            <input type="text" name="search" placeholder="Rechercher un produit" value="{{ request()->get('search') }}">
-            <button type="submit" class="btn btn-primary">Rechercher</button>
-        </form>
+                    <a href="{{ route('produits.create') }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                        <i class="fa-solid fa-plus"></i> Ajouter un produit
+                      </a>
+                     <table class='table w-full mt-4 text-lg border b-1'>
+                        <thead class=' border b-2 border-gray-200'>
+                            <tr class="table-row">
+                                <th class='p-3 font-semibold table-cell border b-1'>Nom</th>
+                                <th class='p-3 font-semibold table-cell border b-1'>Quantité Récolte</th>
+                                <th class='p-3 font-semibold table-cell border b-1'>Date Récolte</th>
+                                <th class='p-3 font-semibold table-cell border b-1'>Statut</th>
+                                <th class='p-3 font-semibold table-cell border b-1'>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody class=''>
+                            @foreach ($produits as $produit)
+                                <tr class="table-row">
+                                    <td class='p-3 text-gray-700 table-cell text-center border b-1'> {{$produit['nom']}} </td>
+                                    <td class='p-3 text-gray-700 table-cell text-center border b-1'> {{$produit["quantiteRecolte"]}} </td>
+                                    <td class='p-3 text-gray-700 table-cell text-center border b-1'> {{$produit["dateRecolte"]}} </td>
+                                    <td class='p-3 text-gray-700 table-cell text-center border b-1'> {{$produit["statut"]}} </td>
+                                    <td class='p-3 text-gray-700 table-cell text-center border b-1'> 
+                                        <div class="flex text-center justify-center">
+                                            <a href="{{ route('produits.show', ['produit' => $produit->id]) }}" class="bg-purple-600 hover:bg-purple-800 text-white font-bold py-2 px-4 rounded ml-2">
+                                                <i class="fa-solid fa-eye" title="afficher"></i>
+                                            </a>
+                                            <span class="ml-2"></span>
+                                            <a href="{{ route('produits.edit', ['produit' => $produit->id]) }}" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded ml-2">
+                                                <i class="fa-solid fa-pen-to-square" title="modifier"></i>
+                                            </a>
+                                            <span class="ml-2"></span>
+                                              <form action="{{ route('produits.destroy', ['produit' => $produit->id]) }}" method="POST" onsubmit="return confirm('Voulez-vous vraiment supprimer ce produit ?');">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
+                                                    <i class="fa-solid fa-trash" title="supprimer"></i>
+                                                </button>
+                                            </form>
+                                        </div>   
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <!-- Ajouter un produit et alert success -->
-    <div class="button-container">
-        <a href="{{ route('produits.create') }}" class="btn btn-primary">Ajouter un Produit</a>
-    </div>
-
-    @if(session('success'))
-        <div class="alert">{{ session('success') }}</div>
-    @endif
-
-    <!-- Liste des produits -->
-    <table>
-        <thead>
-            <tr>
-                <th>Nom</th>
-                <th>Quantité Récoltée</th>
-                <th>Date Récolte</th>
-                <th>Statut</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach($produits as $produit)
-                <tr>
-                    <td>{{ $produit->id }}</td>
-                    <td>{{ $produit->nom }}</td>
-                    <td>{{ $produit->quantiteRecolte }}</td>
-                    <td>{{ $produit->dateRecolte }}</td>
-                    <td>{{ $produit->statut }}</td>
-                    <td class="actions">
-                        <a href="{{ route('produits.show', $produit->id) }}" class="btn btn-info">Voir</a>
-                        <a href="{{ route('produits.edit', $produit->id) }}" class="btn btn-warning">Modifier</a>
-                        <form action="{{ route('produits.destroy', $produit->id) }}" method="POST" style="display:inline;">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn btn-danger" onclick="return confirm('Voulez-vous supprimer ce produit ?')">Supprimer</button>
-                        </form>
-                    </td>
-                </tr>
-            @endforeach
-        </tbody>
-    </table>
-</div>
-@endsection
-
-</body>
-</html>
+    <x-slot name="script">
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script>
+            $(document).ready(function() {
+                setTimeout(function() {
+                    $('#message').fadeOut(300);
+                }, 5000); // 5000 ms = 5 sec
+        
+                $('#close-btn').on("click", function() {
+                    $('#message').fadeOut(300);
+                });
+            });
+        </script>
+        
+    </x-slot>
+</x-app-layout>

@@ -26,8 +26,6 @@
                                 <th class='p-3 font-semibold table-cell border b-1'>Produit</th>
                                 <th class='p-3 font-semibold table-cell border b-1'>Type Transaction</th>
                                 <th class='p-3 font-semibold table-cell border b-1'>Date Transaction</th>
-                                <th class='p-3 font-semibold table-cell border b-1'>Quantité Transitée</th>
-                                <th class='p-3 font-semibold table-cell border b-1'>Prix</th>
                                 <th class='p-3 font-semibold table-cell border b-1'>Actions</th>
                             </tr>
                         </thead>
@@ -38,8 +36,6 @@
                                     <td class='p-3 text-gray-700 table-cell text-center border b-1'> {{$transaction->produit->nom}} </td>
                                     <td class='p-3 text-gray-700 table-cell text-center border b-1'> {{$transaction["typeTransaction"]}} </td>
                                     <td class='p-3 text-gray-700 table-cell text-center border b-1'> {{$transaction["dateTransaction"]}} </td>
-                                    <td class='p-3 text-gray-700 table-cell text-center border b-1'> {{$transaction["quantiteTransitee"]}} </td>
-                                    <td class='p-3 text-gray-700 table-cell text-center border b-1'> {{$transaction["prix"]}} </td>
                                     <td class='p-3 text-gray-700 table-cell text-center border b-1'> 
                                         <div class="flex text-center justify-center">
                                             <a href="{{ route('transactions.show', ['transaction' => $transaction->id]) }}" class="bg-purple-600 hover:bg-purple-800 text-white font-bold py-2 px-4 rounded ml-2">

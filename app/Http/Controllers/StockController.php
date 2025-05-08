@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Stock;
+use App\Models\Produit;
 
 class StockController extends Controller
 {
@@ -24,10 +25,10 @@ class StockController extends Controller
     public function create()
     {
         // Récupérer tous les produits enregistrés
-    //$products = Produit::all();
+        $produits = Produit::where('stock_id', null)->get();
         
         // Retourner la vue avec les produits
-        return view('stock.create'/*, compact('products')*/);
+        return view('stock.create', compact('produits'));
     }
 
 
@@ -67,7 +68,7 @@ class StockController extends Controller
             ]);
         }
     
-        return redirect()->route('stocks.create')->with('success', 'Stock mis à jour avec succès.');
+        return redirect()->route('stock.create')->with('success', 'Stock mis à jour avec succès.');
     }
     
 
@@ -78,7 +79,7 @@ class StockController extends Controller
     {
         //On va afficher un stok precis avec toutes ces information
         $stock = Stock::find($id);
-        return view('stocks.show', compact('stock'));
+        return view('stock.show', compact('stock'));
     }
 
     /**
@@ -88,7 +89,8 @@ class StockController extends Controller
     {
         //On pourra choisir un stock à éditer
         $stock = Stock::find($id);
-        return view('stocks.edit', compact('stock'));
+        $produits = Produit::all();
+        return view('stock.edit', compact('stock','produits'));
     }
 
     /**
@@ -96,14 +98,19 @@ class StockController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //On pourra mettre à jour un stock (Surtout indiquer le lieu de stockage qu'on avait pas ajouter a la création vu que seul l'admin pouvait le faire)
-        
-        $stock = Stock::find($id);
-        $stock->update($request->all());
-
+        $stock = Stock::findOrFail($id);
+    
+        $validated = $request->validate([
+            'quantiteStock' => 'required|integer|min:0',
+            'produit_id' => 'required|exists:produits,id',
+            'lieu' => 'nullable|string|max:255', // <- champ ajouté
+        ]);
+    
+        $stock->update($validated);
+    
         return redirect()->route('stocks.index')->with('success', 'Stock mis à jour avec succès');
-
     }
+    
 
     /**
      * Remove the specified resource from storage.
@@ -113,7 +120,7 @@ class StockController extends Controller
         $stock = Stock::find($id);
         $stock->delete();
 
-        return redirect()->route('stocks.index')
+        return redirect()->route('stock.index')
             ->with('success', 'Stock supprimé avec succès');
     }
 }

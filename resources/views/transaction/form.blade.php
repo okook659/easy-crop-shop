@@ -104,16 +104,15 @@
                         />
                     </div>
 
-                    <div class="mb-4">
-                        <a href="{{ route('transactions.index') }}" class="inline-block w-full text-center bg-stone-600 hover:bg-stone-500 text-white font-bold py-2 px-4 rounded">
-                            Retour
-                        </a>
-                    </div>
-
-                    <div class="mb-4">
-                        <button type="submit" class="w-full bg-green-600 text-white font-medium py-2 px-4 rounded-md hover:bg-green-700 transition">
+                    <div class="flex items-center justify-between">
+                        <button type="submit"
+                            class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
                             Valider
                         </button>
+                        <a href="{{ route('transactions.index') }}"
+                            class="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800">
+                            Annuler
+                        </a>
                     </div>
 
                 </form>

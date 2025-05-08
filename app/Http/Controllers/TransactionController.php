@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Transaction;
 use App\Models\Produit;
 use App\Models\Client;
+use App\Models\Stock;
 use Illuminate\Support\Facades\View;
 
 class TransactionController extends Controller
@@ -45,11 +46,15 @@ class TransactionController extends Controller
             'client_id'=>'required|numeric',
             'produit_id'=>'required|numeric'
         ]);
+        $stock = Stock::where('produit_id', $request->produit_id)->first();
         $transaction = Transaction::create($request->all());
-        if ($transaction->save()) {
+        if($stock->quantiteStock >= $transaction->quantiteTransitee){
+            $stock->quantiteStock -= $transaction->quantiteTransitee; 
+            $stock->save();
+            $transaction->save();     
             return redirect('/transactions')->with([
-                'message' => 'Transaction créée avec succès',
-                'success' => true
+                    'message' => 'Transaction créée avec succès',
+                    'success' => true
             ]);
         } else {
             return back()->with([
@@ -97,8 +102,12 @@ class TransactionController extends Controller
             'produit_id'=>'required|numeric'
         ]);
         $transaction = Transaction::find($id);
+        $stock = Stock::where('produit_id', $transaction->produit_id)->first();
+        $stock->quantiteStock += $transaction->quantiteTransitee;
         $transaction->update($request->all());
         if ($transaction->save()) {
+            $stock->quantiteStock -= $transaction->quantiteTransitee;
+            $stock->save();
             return redirect('/transactions')->with([
                 'message' => 'Transaction modifiée avec succès',
                 'success' => true
@@ -115,8 +124,11 @@ class TransactionController extends Controller
      * Remove the specified resource from storage.
      */
     public function destroy(string $id)
-    {
-        $res = Transaction::find($id)->delete();
+    {   
+        $transaction = Transaction::find($id);
+        $stock = Stock::where('produit_id', $transaction->produit_id)->first();
+        $stock->quantiteStock += $transaction->quantiteTransitee;
+        $res = $transaction->delete();
         if($res){
             return redirect('/transactions')->with([
                 'message' => 'Transaction supprimée avec succès',

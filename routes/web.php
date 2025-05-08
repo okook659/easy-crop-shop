@@ -8,6 +8,7 @@ use App\Http\Controllers\ProduitController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\DashboardController;
 
+
 Route::get('/', function () {
     return view('welcome');
 });

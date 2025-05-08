@@ -19,8 +19,7 @@
         </div>
     </div>
     <div id="header">
-      <h1 class="text-white text-4xl font-bold opacity-0 translate-y-4 animate-slide-up">Bienvenue sur mon site
-      </h1>
+      
     </div>
     <div class="content">
         <h1>Ce que nous proposons</h1>
